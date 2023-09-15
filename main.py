@@ -11,7 +11,7 @@ class RegistrationWindow(tk.Toplevel):
         super().__init__(parent)
         self.parent = parent
         self.title("Registration")
-        self.geometry("400x250+400+200")
+        self.geometry("400x320+400+200")  # Adjusted window size
 
         self.label_1 = tk.Label(self, text="Create Your Account", width=30, font=("bold", 15))
         self.label_1.pack(pady=10)
@@ -36,8 +36,13 @@ class RegistrationWindow(tk.Toplevel):
         self.password_entry = ttk.Entry(self, show="*")
         self.password_entry.pack()
 
+        # Add padding below the entry fields
+        self.entry_padding = tk.Label(self, text="", height=1)
+        self.entry_padding.pack()
+
         self.register_btn = ttk.Button(self, text="Register", command=self.register)
         self.register_btn.pack()
+
 
     def register(self):
         name = self.name_entry.get()
