@@ -43,6 +43,9 @@ class RegistrationWindow(tk.Toplevel):
         self.register_btn = ttk.Button(self, text="Register", command=self.register)
         self.register_btn.pack()
 
+    def is_valid_name(self, name):
+        # Check if the name is valid (contains only letters and spaces)
+        return name.replace(" ", "").isalpha()
 
     def register(self):
         name = self.name_entry.get()
@@ -51,6 +54,11 @@ class RegistrationWindow(tk.Toplevel):
         password = self.password_entry.get()
 
         if name and age and username and password:
+            # Check for valid name
+            if not self.is_valid_name(name):
+                messagebox.showerror("Error", "Invalid characters in name. Please use only letters and spaces.")
+            # Implement your logic for age, username, and password validation here...
+
             # Store the account data (you can replace this with a database)
             self.parent.account_data[username] = {'name': name, 'age': age, 'password': password}
             self.parent.registered = True
