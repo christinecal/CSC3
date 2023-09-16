@@ -11,7 +11,7 @@ class RegistrationWindow(tk.Toplevel):
         super().__init__(parent)
         self.parent = parent
         self.title("Registration")
-        self.geometry("400x320+400+200")  # Adjusted window size
+        self.geometry("400x400+400+200")  # Adjusted window size
 
         self.label_1 = tk.Label(self, text="Create Your Account", width=30, font=("bold", 15))
         self.label_1.pack(pady=10)
@@ -21,20 +21,36 @@ class RegistrationWindow(tk.Toplevel):
         self.name_entry = ttk.Entry(self)
         self.name_entry.pack()
 
+        # Error message label for the Name input
+        self.name_error_label = tk.Label(self, text="", fg="red")
+        self.name_error_label.pack()
+
         self.age_label = tk.Label(self, text="Age:")
         self.age_label.pack()
         self.age_entry = ttk.Entry(self)
         self.age_entry.pack()
+
+        # Error message label for the Age input
+        self.age_error_label = tk.Label(self, text="", fg="red")
+        self.age_error_label.pack()
 
         self.username_label = tk.Label(self, text="Username:")
         self.username_label.pack()
         self.username_entry = ttk.Entry(self)
         self.username_entry.pack()
 
+        # Error message label for the Username input
+        self.username_error_label = tk.Label(self, text="", fg="red")
+        self.username_error_label.pack()
+
         self.password_label = tk.Label(self, text="Password:")
         self.password_label.pack()
         self.password_entry = ttk.Entry(self, show="*")
         self.password_entry.pack()
+
+        # Error message label for the Password input
+        self.password_error_label = tk.Label(self, text="", fg="red")
+        self.password_error_label.pack()
 
         # Add padding below the entry fields
         self.entry_padding = tk.Label(self, text="", height=1)
@@ -43,31 +59,126 @@ class RegistrationWindow(tk.Toplevel):
         self.register_btn = ttk.Button(self, text="Register", command=self.register)
         self.register_btn.pack()
 
-    def is_valid_name(self, name):
-        # Check if the name is valid (contains only letters and spaces)
-        return name.replace(" ", "").isalpha()
+    def display_name_error_message(self, message):
+        self.name_error_label.config(text=message, fg="red")
 
-    def register(self):
+    def display_age_error_message(self, message):
+        self.age_error_label.config(text=message, fg="red")
+
+    def display_username_error_message(self, message):
+        self.username_error_label.config(text=message, fg="red")
+
+    def display_password_error_message(self, message):
+        self.password_error_label.config(text=message, fg="red")
+
+    def validate_name(self):
         name = self.name_entry.get()
+
+        if not name.strip():
+            self.display_name_error_message("Please enter a name.")
+            return False
+
+        if not all(char.isalpha() or char.isspace() for char in name):
+            self.display_name_error_message("Name must contain only letters and spaces.")
+            return False
+
+        if len(name) < 3:
+            self.display_name_error_message("Name is too short. Please enter a valid name.")
+            return False
+
+    # Clear any previous error message
+        self.display_name_error_message("")
+        return True
+
+
+    def validate_age(self):
         age = self.age_entry.get()
+
+        if not age.strip():
+            self.display_age_error_message("Please enter an age.")
+            return False
+
+        if not age.isdigit():
+            self.display_age_error_message("Age must be a number.")
+            return False
+
+        age = int(age)
+        if age < 6:
+            self.display_age_error_message("Age is below minimum (6 years old).")
+            return False
+
+        if age > 99:
+            self.display_age_error_message("Age is above maximum (99 years old).")
+            return False
+
+        # Clear any previous error message
+        self.display_age_error_message("")
+        return True
+
+    def validate_username(self):
         username = self.username_entry.get()
+
+        if not username.strip():
+            self.display_username_error_message("Please enter a username.")
+            return False
+
+        if not username.isalnum():
+            self.display_username_error_message("Invalid characters in username.")
+            return False
+
+        if len(username) < 4:
+            self.display_username_error_message("Username is too short.")
+            return False
+
+        # Clear any previous error message
+        self.display_username_error_message("")
+        return True
+
+    def validate_password(self):
         password = self.password_entry.get()
 
-        if name and age and username and password:
-            # Check for valid name
-            if not self.is_valid_name(name):
-                messagebox.showerror("Error", "Invalid characters in name. Please use only letters and spaces.")
-            # Implement your logic for age, username, and password validation here...
+        if not password.strip():
+            self.display_password_error_message("Please enter a password.")
+            return False
 
-            # Store the account data (you can replace this with a database)
-            self.parent.account_data[username] = {'name': name, 'age': age, 'password': password}
-            self.parent.registered = True
-            self.parent.btn_register.config(state="disabled")  # Disable the Register button
-            self.parent.btn_register.pack_forget()  # Hide the Register button
-            self.destroy()
-            messagebox.showinfo("Info", "Registration Successful!")
-        else:
-            messagebox.showerror("Error", "Please enter all required information.")
+        if not any(char.isalnum() for char in password):
+            self.display_password_error_message("Password must contain at least one letter or digit.")
+            return False
+
+        if not any(char in "!@#$%^&*()_-+={}[]|\:;'<>,.?/~" for char in password):
+            self.display_password_error_message("Password must contain at least one special character.")
+            return False
+
+        if len(password) < 6:
+            self.display_password_error_message("Password is too short. It must be at least 6 characters.")
+            return False
+
+        # Clear any previous error message
+        self.display_password_error_message("")
+        return True
+
+    def register(self):
+        if (
+            self.validate_name()
+            and self.validate_age()
+            and self.validate_username()
+            and self.validate_password()
+        ):
+            name = self.name_entry.get()
+            age = self.age_entry.get()
+            username = self.username_entry.get()
+            password = self.password_entry.get()
+
+            if name and age and username and password:
+                # Store the account data (you can replace this with a database)
+                self.parent.account_data[username] = {'name': name, 'age': age, 'password': password}
+                self.parent.registered = True
+                self.parent.btn_register.config(state="disabled")  # Disable the Register button
+                self.parent.btn_register.pack_forget()  # Hide the Register button
+                self.destroy()
+                self.parent.display_info_message("Registration Successful!")
+            else:
+                self.display_name_error_message("Please enter all required information.")
 
 class QuizApp(tk.Tk):
     def __init__(self):
@@ -89,6 +200,9 @@ class QuizApp(tk.Tk):
         self.btn_register.pack()
 
         self.current_user = None  # Store the current user's data
+
+    def display_info_message(self, message):
+        messagebox.showinfo("Info", message)
 
     def create_account_window(self):
         if not self.registered:
