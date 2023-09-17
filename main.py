@@ -83,7 +83,7 @@ class RegistrationWindow(tk.Toplevel):
             return False
 
         if len(name) < 3:
-            self.display_name_error_message("Name is too short. Please enter a valid name.")
+            self.display_name_error_message("Name is too short. It must be at least 3 characters.")
             return False
 
     # Clear any previous error message
@@ -127,7 +127,7 @@ class RegistrationWindow(tk.Toplevel):
             return False
 
         if len(username) < 4:
-            self.display_username_error_message("Username is too short.")
+            self.display_username_error_message("Username is too short. It must be at least 4 characters.")
             return False
 
         # Clear any previous error message
