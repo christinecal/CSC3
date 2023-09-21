@@ -21,7 +21,7 @@ class RegistrationWindow(tk.Toplevel):
         self.name_entry = ttk.Entry(self)
         self.name_entry.pack()
 
-        # Error message label for the Name input
+        # Text error message label for the Name input
         self.name_error_label = tk.Label(self, text="", fg="red")
         self.name_error_label.pack()
 
@@ -30,7 +30,7 @@ class RegistrationWindow(tk.Toplevel):
         self.age_entry = ttk.Entry(self)
         self.age_entry.pack()
 
-        # Error message label for the Age input
+        # Text error message label for the Age input
         self.age_error_label = tk.Label(self, text="", fg="red")
         self.age_error_label.pack()
 
@@ -39,7 +39,7 @@ class RegistrationWindow(tk.Toplevel):
         self.username_entry = ttk.Entry(self)
         self.username_entry.pack()
 
-        # Error message label for the Username input
+        # Text error message label for the Username input
         self.username_error_label = tk.Label(self, text="", fg="red")
         self.username_error_label.pack()
 
@@ -48,11 +48,11 @@ class RegistrationWindow(tk.Toplevel):
         self.password_entry = ttk.Entry(self, show="*")
         self.password_entry.pack()
 
-        # Error message label for the Password input
+        # Text error message label for the Password input
         self.password_error_label = tk.Label(self, text="", fg="red")
         self.password_error_label.pack()
 
-        # Add padding below the entry fields
+        # Padding below the entry fields
         self.entry_padding = tk.Label(self, text="", height=1)
         self.entry_padding.pack()
 
@@ -103,12 +103,12 @@ class RegistrationWindow(tk.Toplevel):
             return False
 
         age = int(age)
-        if age < 6:
-            self.display_age_error_message("Age is below minimum (6 years old).")
+        if age < 7:
+            self.display_age_error_message("Age is below minimum (7 years old).")
             return False
 
-        if age > 99:
-            self.display_age_error_message("Age is above maximum (99 years old).")
+        if age > 12:
+            self.display_age_error_message("Age is above maximum (12 years old).")
             return False
 
         # Clear any previous error message
